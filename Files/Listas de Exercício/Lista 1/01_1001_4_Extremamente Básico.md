@@ -20,6 +20,17 @@ A entrada contém 2 valores inteiros.
 
 Imprima a mensagem "X = " (letra X maiúscula) seguido pelo valor da variável **X** e pelo final de linha. Cuide para que tenha um espaço antes e depois do sinal de igualdade, conforme o exemplo abaixo.
 
+| Exemplos de Entrada | Exemplos de Saída |
+| ------------------- | ----------------- |
+| 10                  | X = 19            |
+| 9                   | &nbsp;            |
+| &nbsp;              | &nbsp;            |
+| -10                 | X = -6            |
+| 4                   | &nbsp;            |
+| &nbsp;              | &nbsp;            |
+| 15                  | X = 8             |
+| -7                  | &nbsp;            |
+
 ## Código
 
 ```cpp
