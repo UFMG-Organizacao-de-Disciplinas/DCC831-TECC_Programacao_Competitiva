@@ -476,3 +476,90 @@ Faz-se uma busca binária onde todo "não" seria um intervalo aberto e todo "sim
 Um outro jeito é ir avançando $2^i$, $2^{i+1}$, até encontrar o ponto que a resposta é não na posição $2^l$, e então sabemos que os bounds são $2^{l-1}$ e $2^l$. Essa ideia aí é a busca binária ilimitada.
 
 ---
+
+## 24/03/2025 - Aula 5
+
+- Aula passada:
+  - $f(k)$:
+    - $k \leq K_{\max} \to$ possível
+    - $k > K_{\max} \to$ impossível
+  - Ao invés de $O(n \log n)$, deveria ser $O(n \log k)$
+  - Mais precisamente: $O(n (\log k + \log n))$
+
+---
+
+### Problema 1: Distribuição de torres de sinal de internet
+
+- Descrição
+  - Estão distribuídas em (x, y)
+  - Como encontrar o menor raio de comunicação?
+    - "Menor raio que todas as torres precisam ter para que todas as torres se comuniquem?"
+  - Resposta com float
+- **Resolução 1:** MSP
+  - Primeiro faz o grafo completo
+  - Cada grafo tem como peso a distância entre eles
+  - Devemos encontrar uma Árvore Geradora Mínima de tal modo que consigamos que a maior aresta seja a menor possível
+    - [JV: eu tava considerando que não necessariamente essa seria a melhor solução, porém, pelo argumento da troca, se há outra aresta melhor, que a maior, então isso implicaria na existência de outro MSP (Minimum Spanning Tree) com essa aresta melhor que seria globalmente menor.]
+  - Complexidade: $O(m \log n)$
+    - $m \leq \binom{n}{2} < n^2$
+    - Porém $m$ é quadrático porque no pior caso o grafo é completo
+  - Obs.: Não precisa usar a raiz para calcular as distâncias. Só no final faria a raiz para ter as distâncias.
+- **Resolução 2:** Busca Binária
+  - Faz uma busca binária no raio
+  - Define o problema como um problema de decisão: para um raio $r$ é possível gerar um grafo conexo?
+  - $D = \max_{\forall i, j} dist (i, j)$
+  - $d \in [0, D]$
+  - Complexidade: $O(\log D)$ para encontrar o inteiro que queremos. Porém, a resposta tem uma precisão de $10^{-6}$, então precisamos testar mais $\log 10^6$ vezes para encontrar a precisão.
+  - Podemos também ordenar todas as distâncias possíveis em um vetor, e então a complexidade será
+    - $O(\log n^2) = O(\log n)$
+  - Surgiu uma discussão de que há uma complexidade omissa nessa solução que seria o de ordenação do vetor de distâncias, o que certamente tornaria a **Resolução 1** mais eficiente.
+
+### Problema 2: menor distância entre transeuntes
+
+- Descrição
+  - temos duas pessoas que começam em dois pontos diferentes para uma determinada direção com uma determinada velocidade.
+  - Encontrar a menor distância entre elas.
+- Construção
+  - $P_1(t) = P_1(0) + t \cdot \overrightarrow{v_1}$
+  - $\min_{\forall t \geq 0} |P_1(t) - P_2(t)|^2$
+- **Solução 1**
+  - Análise matemática analítica: considerando a situação inicial a gente consegue definir matematicamente uma solução física que encontra a menor distância.
+- **Solução 2**
+  - Busca Binária (BB) no tempo [0, T]
+  - BB na distância [0, dist(P_1(0), P_2(0))]
+  - Na real, busca ternária no gráfico
+  - Não definimos onde ele está, mas sim, onde não está.
+  - Na busca binária: $l, r$
+    - $m = (l+r)/2$
+  - Na busca ternária: $l, r$
+    - $m_1 = l + (r-l)/3$
+    - $m_2 = r - (r-l)/3$
+    - Em casos de apenas inteiro, distâncias menores que 3 não gerariam alterações
+  - Complexidade: $\log_{\frac{3}{2}} n$
+- **Solução 3:**
+  - Outra alternativa sera a busca binária ilimitada
+
+### Problema 3: checar soma de dois elementos
+
+- Descrição:
+  - $S$ com $n$ inteiros, e um inteiro $x$
+  - $\forall s \in S, s \leq 10^9$
+  - $\exists a, b \in S, a \neq b$
+  - $a + b = x$?
+- **Solução 1**
+  - Podemos definir os valores de $s$ em um número binário.
+  - Ou então fazer um vetor contando a quantidade de vezes que cada número aparece.
+  - Complexidade: $O(S_{max} + n)$
+    - $n =$ leitura da entrada
+    - $S_{max} =$ o tamanho do vetor e definir todos os valores como 0
+  - Para isso adicionamos todos os valores de $s$ menores que $x$ no vetor, e depois verificamos um a um se o valor de $x-a$ também está presente.
+- **Solução 2**
+  - para cada número, verificar se $x-a$ também está presente em BB
+  - Complexidade: $O(n \log n)$ (Ordenar + BB)
+- **Solução 3:** Técnica dos dois ponteiros
+  - partindo do vetorzão, ordenamos.
+  - Começamos com os índices $l$ e $r$. Se a soma dos dois for maior que $x$, decrementamos o $r$, se for menor, incrementamos o $l$.
+
+### Problema 4: ao invés de checar a soma, verificar se existe $a, b, x$
+
+## 26/03/2025 - Aula 6
