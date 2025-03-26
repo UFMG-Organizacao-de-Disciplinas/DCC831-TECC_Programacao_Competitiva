@@ -563,3 +563,118 @@ Um outro jeito é ir avançando $2^i$, $2^{i+1}$, até encontrar o ponto que a r
 ### Problema 4: ao invés de checar a soma, verificar se existe $a, b, x$
 
 ## 26/03/2025 - Aula 6
+
+- Problema "Port Recovery"(?)
+  - Ex:
+    - 11112
+    - 11112
+    - 121224
+    - ===
+    - 1+11=12
+    - 11+1=12
+    - 12+12=24
+    - ===
+    - 11+1=12
+    - 1+11=12
+    - 12+12=24
+  - O resultado geralmente é pela ordem lexicografica
+
+### Retomando o problema (4) de ontem
+
+- Solução 1:
+  - Verificar se há um triplo $a, b, x$ tal que $a+b=x$
+  - Então escolhe um x qualquer e então faz linearmente com aqueles dois índices.
+  - Fazendo para todos os X teremos então a complexidade de $O(n^2)$
+- Esse problema seria similar a $a+b+x=0$, que é basicamente a mesma coisa que o anterior, só que com x negativo.
+
+### Problema 6.1
+
+- Descrição
+  - Subsetsum
+  - dado um $v[], n, x, v[i] \geq 0, \forall i$
+  - $\exists l, r | \sum_{i=l}^{k} v[i] = x?$
+- **Solução 1:** Ingênuo, testa todos os casos
+  - $O(n^3)$
+- **Solução 2:** Somatório de acumulados
+  - $\sum_{i=l}^{k} v[i] = \sum_{i=0}^{r} v[i] - \sum_{i=0}^{l-1} v[i]$
+  - Faz-se um vetor de somas acumuladas, e então faz-se uma busca binária para encontrar o valor de $x$.
+  - Complexidade: $O(n \log n)$
+- **Solução 3:** Técnica dos dois ponteiros
+  - $l, r$, ambos começando na esquerda
+  - Se a soma for menor que $x$, incrementa o $r$, se for maior, incrementa o $l$.
+  - Com isso, no somatório acumulado, sempre soma o valor de $v[r]$ e subtrai o valor de $v[l-1]$
+  - Há alguma garantia de que não pulamos nenhuma solução viável?
+
+### Formas de debugar
+
+- 3 códigos
+  - Gerador de casos de teste
+  - Código de execução 1
+  - Código de execução 2
+  - Checa se os dois resultados são iguais
+
+### Problema 6.2
+
+- Descrição
+  - Dados X, $y \exists S \subset X$ tal que $\sum_{s \in S} s = y$?
+- **Solução**
+  - Problema da mochila/Subsetsum
+  - Se quero percorrer todas as possibilidades dos 11111, posso ir até o 100000, ou seja (1<<n)
+  - código
+    - $for (i=0; i < (1<<n); i++)$
+      - $for (j=0; j < n; j++)$
+        - $if (i & (1<<j))$
+          - $soma += v[j]$
+      - $if (soma == y)$
+        - $return;$
+  - Complexidade: $O(2^n \cdot n)$
+
+### Problema 6.3
+
+- Descrição
+  - O mesmo que o anterior, porém queremos ter de 0 a 3 itens.
+- **Solução 1**
+  - Usar vetor de inteiros, subtrair os itens que adicionarmos no conjunto, e se não encontrarmos, fazemos o refresh do valor.
+- **Solução 2**
+  - Usamos a base 3
+
+### Problema 6.4
+
+- Descrição
+  - Quero tentar todas as possíveis combinações de:
+    - X[] = {1, 2, 3, 4, 5}
+    - Q[] = {1, 3, 2,2}
+  - Não entendi legal
+- **Solução**
+  - Código
+    - $rec(int p)$
+      - $if (p == n)$
+        - $\dots$
+        - $return;$
+      - $if(rec(p+1))$
+        - $for (i=1; i <= Q[p]; i++)$
+          - $soma += X[p]$
+          - $if(rec(p+1))$
+        - $soma -= Q[p] \cdot X[p]$
+      - $return false;$
+  - Complexidade: $O(2^n)$?
+
+### Problema 6.5
+
+- Descrição
+  - $\forall S \subset X, |S| = k$
+  - Verificar se $P(S)=true$
+- **Solução**
+  - Código
+    - $S[]$
+    - $rec(int p, int q)$
+      - $if (q == k)$
+        - $return confere();$
+      - $if (p == n)$
+        - $return;$
+      - $S[q] = p;$
+      - $if (rec(p+1, q+1)) return true;$
+      - $if (rec(p+1, q)) return true;$
+      - $return false;$
+
+## 31/03/2025 - Aula 7
