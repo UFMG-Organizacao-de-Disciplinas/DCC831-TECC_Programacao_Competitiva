@@ -564,6 +564,8 @@ Um outro jeito é ir avançando $2^i$, $2^{i+1}$, até encontrar o ponto que a r
 
 ## 26/03/2025 - Aula 5
 
+### Problema "Port Recovery"(?)
+
 - Problema "Port Recovery"(?)
   - Ex:
     - 11112
@@ -678,3 +680,101 @@ Um outro jeito é ir avançando $2^i$, $2^{i+1}$, até encontrar o ponto que a r
       - $return false;$
 
 ## 31/03/2025 - Aula 6
+
+### Tarefa que foi pra casa
+
+- Todos os subconjuntos: $2^n$
+- Todos os subconjuntos com $k$ elementos: $\binom{n}{k}$
+- Todas as permutações: $n!$
+- Todos os arranjos de $k$ elementos: $\binom{n}{k} \cdot k!$
+
+### Forma de analisar complexidade de recursão
+
+- Analisar o número de nós e o gasto por nível.
+- Quando a árvore for bem balanceada, e todas as folhas estiverem no mesmo nível, a complexidade temne a ser a quantidade de folhas.
+
+### Conteúdo dessa aula e provavelemente das próximas 3 semanas: Programação Dinâmica
+
+#### Problema da mochila [0, 1]
+
+|      $i$ | $P_i$ | $v_i$ |
+| -------: | ----: | ----: |
+|        1 |   ... |   ... |
+| $\vdots$ |   ... |   ... |
+|        n |   ... |   ... |
+
+- $C$ = Peso
+- $\max_{S \subseteq \{1, \dots, n\}} \sum_{i \in S} v_i$
+- s. a. [JV: Não sei o que é] $\sum_{i \in S} P_i \leq C$
+
+POdemos considerar um subproblema tal que:
+
+```mermaid
+flowchart LR
+  A((i, j)) -->|"`$I \in S$`"| B((B))
+  A((i, j)) -->|"`$I \notin S$`"| C((C))
+```
+
+- $0 \leq j \leq C \leq 10^4 << 2^{1000}$
+- $M(i, j) =$ maior valor que pode ser obtido com um subconjunto de $\{1, \dots, i\}$ em uma mochila com capacidade $j$.
+- $M(n, C) \Rightarrow$ resposta
+
+##### Encontrando a relação de recorrência
+
+$$
+M(i, j) =\begin{cases}
+  0 & i=0\\
+  M(i-1, j) & p_i < j\\
+  \max (M(i-1, j), M(i-1, j-p_i)+v_i) & \\
+\end{cases}
+$$
+
+- No terceiro caso:
+  - $M(i-1, j)$: sem $i$
+  - $M(i-1, j-p_i)+v_i$: com $i$
+
+##### Código Iterativo $\Theta(nC)$ Top-Down
+
+```c++
+int m[n+1][c+1];
+for(j=0; j <= C; j++) {
+  n[0][j] = 0;
+}
+for(i=1; i <= n; i++) {
+  for(j=0; j <= C; j++) {
+    if(p[i] > j){
+      m[i[j]] = m[i-1][j];
+    } else {
+      m[i][j] = max(m[i-1][j], m[i-1][j-p[i] + v[i]]);
+    }
+  }
+}
+```
+
+##### Código Recursivo $O(nC)$ Top-Down
+
+```c++
+int m[n+1][c+1];
+int M(int i, int j){
+  if (i==0) return 0;
+  if (m[i][j] >= 0) return m[i][j];
+  if (p[i] > j) return m[i][j]=M(i-1, j);
+  return m[i][j]=max(M(i-1, j), M(i-1, j-p[i]+v[i]));
+}
+```
+
+Obs.: Embora as a linha: `if (m[i][j] >= 0) return m[i][j];` possa ser chamada várias vezes, isso não gera uma nova chamada da função, então isso não aumenta a complexidade do código.
+
+##### Vantagens e desvantagens
+
+- Recursão tem overhead: colocar todas as variáveis locais na pilha.
+- Iteração visita as informações em cache de forma bem sequencial. Já a recursão fica pulando pela memória.
+- Usualmente o iterativo é melhor.
+
+##### Inicialização do vetor
+
+- DP Esparsa: quando várias posições da matriz não são necessárias ou não são usadas.
+
+Podemos usar uma variável vetorial/matricial que definiria o valor na tal posição i, j com o valor usados como sendo os exatos valores i, j. Se forem exatamente iguais, você já visitou.
+
+## 02/04/2025 - Aula 7
