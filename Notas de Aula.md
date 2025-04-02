@@ -1,6 +1,6 @@
 # Programação Competitiva - Professor: Vinícius Santos
 
-## 10/03/2025 - Aula 1
+## 10/03/2025 - Aula 01
 
 Principal objetivo é implementar.
 
@@ -156,9 +156,9 @@ entrada do grafo
 - O que é um pair?
   - É uma struct com dois valores em que o primeiro valor tá armazenado na chave first e o segundo na chave second
 
-## 12/03/2025 - Aula X - Sem Aula
+## 12/03/2025 - Aula XX - Sem Aula
 
-## 17/03/2025 - Aula 2
+## 17/03/2025 - Aula 02
 
 - Submissão das 5 listas no Beecrowd
 - A primeira é até dia 9 de abril às 23h59
@@ -373,7 +373,7 @@ int main(){
 }
 ```
 
-## 19/03/2025 - Aula 3 - Chamada no início da aula
+## 19/03/2025 - Aula 03 - Chamada no início da aula
 
 - Tradeoffs:
   - O mais eficiente e complicado ou o mais simples mas com pior complexidade?
@@ -477,7 +477,7 @@ Um outro jeito é ir avançando $2^i$, $2^{i+1}$, até encontrar o ponto que a r
 
 ---
 
-## 24/03/2025 - Aula 4
+## 24/03/2025 - Aula 04
 
 - Aula passada:
   - $f(k)$:
@@ -562,7 +562,7 @@ Um outro jeito é ir avançando $2^i$, $2^{i+1}$, até encontrar o ponto que a r
 
 ### Problema 4: ao invés de checar a soma, verificar se existe $a, b, x$
 
-## 26/03/2025 - Aula 5
+## 26/03/2025 - Aula 05
 
 ### Problema "Port Recovery"(?)
 
@@ -679,7 +679,7 @@ Um outro jeito é ir avançando $2^i$, $2^{i+1}$, até encontrar o ponto que a r
       - $if (rec(p+1, q)) return true;$
       - $return false;$
 
-## 31/03/2025 - Aula 6
+## 31/03/2025 - Aula 06
 
 ### Tarefa que foi pra casa
 
@@ -777,4 +777,4 @@ Obs.: Embora as a linha: `if (m[i][j] >= 0) return m[i][j];` possa ser chamada v
 
 Podemos usar uma variável vetorial/matricial que definiria o valor na tal posição i, j com o valor usados como sendo os exatos valores i, j. Se forem exatamente iguais, você já visitou.
 
-## 02/04/2025 - Aula 7
+## 02/04/2025 - Aula 07
