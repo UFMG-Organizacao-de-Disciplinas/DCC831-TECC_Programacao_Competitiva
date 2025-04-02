@@ -778,3 +778,100 @@ Obs.: Embora as a linha: `if (m[i][j] >= 0) return m[i][j];` possa ser chamada v
 Podemos usar uma variável vetorial/matricial que definiria o valor na tal posição i, j com o valor usados como sendo os exatos valores i, j. Se forem exatamente iguais, você já visitou.
 
 ## 02/04/2025 - Aula 07
+
+### Ainda o problema da mochila
+
+- $n$ objetos
+- $C$ Capacidade
+- $O(nC)$
+- $nC \leq 10^8$
+- $p_i \leq C$
+- $v_i$
+
+---
+
+- $p_i \leq C \leq 10^9$
+- $v_i \leq 10^3$
+- $n \leq 10^2$
+
+Como pesos e capacidades estão associadas...
+
+Agora, buscaremos uma forma de evitar que a complexidade dependa da ordem de grandeza dos pesos, e passe a depender da quantidade dos itens e/ou dos seus valores.
+
+- $N(i, j) =$ Menor capacidade de mochila necessária para caber $\geq j$ unidades de lucro utilizando apenas objetos $\{1, \dots, i\}$.
+- $M(n, C)$: como fazíamos antes.
+- $N(n, j), \forall j \in [0, LucroMax]$
+- $LucroMax = \sum_{i=1}^{n} v_i$
+
+---
+
+$$
+N(i, j) = \begin{cases}
+  0                                  & j=0 [\text{opção 1: } j \leq 0]     \\
+  \infty                             & i=0, j \neq 0                       \\
+  N(i-1, j)                          & p_i > N(i-1, j)                     \\
+  \min(N(i-1, j), N(i-1, j-v_i [\text{opção 2: \max (0, j-v_i)} ])+p_i) &  \\
+$$
+
+### Problema: Longest Increasing Subsequence (LIS) | Achar a maior subsequência que é crescente
+
+Exemplo: 7, 4, 8, 5, 13, 10, 11, 9, 14, 8
+
+casos válidos: 4, 8, 13, 14; 4, 5, 10, 11, 14;
+
+$LIS(i) =$ COmprimento da maior subsequência terminando em $i$.
+
+Calculando LIS do exemplo:
+
+| Categorias |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |
+| ---------- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Valores:   |    7 |    4 |    8 |    5 |   13 |   10 |   11 |    9 |   14 |    8 |
+| Lis(i)     |    1 |    1 |    2 |    2 |    3 |    3 |    4 |    3 |    5 |    3 |
+
+- $Lis(i) = \max_{\forall j < i; v[j] < v[i]} LIS(j)+1$
+- Resposta: $\max_{\forall i} LIS(i)$
+
+$\Theta(n^2)$
+
+| Categorias | 0         |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |
+| ---------- | --------- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Valores:   | $-\infty$ |    7 |    4 |    8 |    5 |   13 |   10 |   11 |    9 |   14 |    8 |
+| Lis(i)     | 0         |    1 |    1 |    2 |    2 |    3 |    3 |    4 |    3 |    5 |    3 |
+
+#### Melhoria do LIS
+
+Melhorando: Apenas guarda a mais recente melhoria para determinado valor.
+
+Ao invés de comparar todos os valores, podemos armazenar apenas o mais recente mínimo valor encontrado
+
+| Categorias | 0         |    1 |     2 |    3 |     4 |    5 |    6 |     7 |    8 |     9 |    10 |
+| ---------- | --------- | ---: | ----: | ---: | ----: | ---: | ---: | ----: | ---: | ----: | ----: |
+| Valores:   | $-\infty$ |    7 |     4 |    8 |     5 |   13 |   10 |    11 |    9 |    14 |     8 |
+| Lis(i)     | 0         |    1 | **1** |    2 | **2** |    3 |    3 | **4** |    3 | **5** | **3** |
+
+| Índice | Menor Elemento terminando IS de comprimento i |
+| -----: | :-------------------------------------------- |
+|      0 | $-\infty$                                     |
+|      1 | $\infty$; 7; 4                                |
+|      2 | $\infty$; 8; 5;                               |
+|      3 | $\infty$; 13; 10; 9; 8                        |
+|      4 | $\infty$; 11;                                 |
+|      5 | $\infty$; 14;                                 |
+
+Pode-se usar busca binária para encontrar onde inserir o valor.
+
+- Complexidade: $O(n \log n)$
+
+##### E como encontrar a solução?
+
+- Um vetor auxiliar que armazena o índice do valor anterior válido.
+
+| Categorias | 0         |    1 |     2 |    3 |     4 |    5 |    6 |     7 |    8 |     9 |    10 |
+| ---------- | --------- | ---: | ----: | ---: | ----: | ---: | ---: | ----: | ---: | ----: | ----: |
+| Valores:   | $-\infty$ |    7 |     4 |    8 |     5 |   13 |   10 |    11 |    9 |    14 |     8 |
+| Lis(i)     | 0         |    1 | **1** |    2 | **2** |    3 |    3 | **4** |    3 | **5** | **3** |
+| Anterior   | 0         |    0 |     0 |    2 |     2 |    4 |    4 |     6 |    4 |     7 |     4 |
+
+Uma possibilidade seria varrer o vetor LIS da direita pra esquerda sempre pegando o primeiro valor de determinado valor do lis.
+
+## 07/04/2025 - Aula 08
