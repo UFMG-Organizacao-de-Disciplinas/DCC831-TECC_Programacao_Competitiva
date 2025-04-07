@@ -875,3 +875,171 @@ Pode-se usar busca binária para encontrar onde inserir o valor.
 Uma possibilidade seria varrer o vetor LIS da direita pra esquerda sempre pegando o primeiro valor de determinado valor do lis.
 
 ## 07/04/2025 - Aula 08
+
+### Problema de multiplicação de matrizes
+
+- AxB \* BxC = AxC
+- $O(abc)$
+
+---
+
+- $A_{axb}, B_{bxc}, C_{cxd}$
+- Associativa: $(A \cdot B) \cdot C = A \cdot (B \cdot C)$
+- abc + acd =?= abd + bcd
+- $a, c \approx 10^3$
+- $b, d \approx 10^6$
+
+---
+
+- O problema em específico busca encontrar quais as melhores sequências de matrizes a se multiplicar para que o custo seja o menor possível.
+- Dadas matrizes: $A_{1}, A_{2}, \dots, A_{n}$
+- $a_0, \dots, a_n \in \mathbb{N}$
+- $A_{i}$ dimensão $a_{i-j} \times a_{i}$
+
+#### Solução 01
+
+$A_1 \cdot A_2 \cdot A_3 \cdot A_4 \cdot A_5$
+
+- Testar todas as possibilidades de combinações de primeiro par
+  - $O(n-1)!$
+
+|    n | # formas |
+| ---: | -------: |
+|    1 |        1 |
+|    2 |        1 |
+|    3 |        2 |
+|    4 |        5 |
+|    5 |       14 |
+
+1. (..)(..)
+2. (((..).).)
+3. ((.(..)).)
+4. (.((..).))
+5. (.(.(..)))
+
+Analisando o último:
+
+1. (..)\*(..)
+2. (((..).)\*.)
+3. ((.(..))\*.)
+4. (.\*((..).))
+5. (.\*(.(..)))
+
+- $C(n) = \sum_{i=1}^{n-1} C(i) \cdot C(n-i)$
+- $C(5) = C(1) \cdot C(4) + C(2) \cdot C(3) + C(3) \cdot C(2) + C(4) \cdot C(1) = 1 \cdot 5 + 1 \cdot 2 + 2 \cdot 1 + 5 \cdot 1 = 14$
+
+Números de Catalão
+
+Convolução
+
+Exercício: prove por indução de que isso é pelo menos tão ruim quanto exponencial.
+
+- Números de maneiras de construir uma árvore com N nós
+  - $A(n) = 1, n \leq 1$
+  - $An(n) = \sum_{i=0}^{n-1} A(i) \cdot A(n-i-1)$
+<!-- - $C(n) = \frac{1}{n+1} \binom{2n}{n}$ -->
+
+#### Solução 2 - Aula 08
+
+Se eu tenho uma sequência de matrizes, o que mais importa é quando vamos no menor caso de multiplicar 3 das matrizes. Ou melhor, a melhor combinação entre os elementos $A_i$ e $A_j$.
+
+Outra forma de pensar, é escolher a melhor forma de multiplicar $A_1$ a $A_i$ e de $A_{i+1}$ a $A_n$.
+
+Para $i \leq j$, $M(i, j) =$ menor número de mulplicações necessárias para computar $(A_i \dots A_j)$.
+
+- $i \leq k < j$
+- $(A_i \cdots A_{i+1} \dots A_k)(A_{k+1} \cdots A_j)$
+- $M(i, k) = (A_i \cdots A_{i+1} \dots A_k)$
+- $M(k+1, j) = (A_{k+1} \cdots A_j)$
+- Número de multiplicações: $M(i, k) + a_{i-1} a_{k} a_{j} + M(k+1, j)$
+
+$$
+\begin{cases}
+  0                     & i = j \\
+  a_{i-1}a_{i}a_{i+1}   & i = j-1 \\
+  \min_{i \leq k < j} M(i, k) + M(k+1, j) + a_{i-1} \cdot a_j \cdot a_k & i < j \\
+\end{cases}
+$$
+
+busca encontrar o mínimo $k$.
+
+Complexidade: $O(n^3)$
+
+```c
+for (i=0; i <= n-1; i++) {
+  for (j=i+1; j <= n; j++) {
+    for (k) {
+      M(i, j)
+    }
+  }
+}
+```
+
+Intuitivamente, para calcular determinado valor $(i, j)$, precisamos ter calculado todos os valos à sua esquerda e à sua direita. Porém o código acima não faz isso.
+
+Podemos então, na matriz triangular superior, podemos percorrer ela:
+
+1. de baixo pra cima, da esquerda pra direita
+2. da esquerda pra direita, de baixo pra cima
+3. Na diagonal, subindo um nível na diagonal, sem uma ordem específica.
+   - d=1: (1,2), (2,3), (3,4), ..., (n-1,n)
+   - d=2: (1,3), (2,4), (3,5), ..., (n-2,n)
+   - d: (1, d+1), (2, d+2), (3, d+3), ..., (n-d,n)
+
+Em relação a cache, talvez a opção 1 seja melhor.
+
+Se armazenarmos os valores de $k$ que minimizam numa matriz $r[i][j]$, podemos encontrar a solução em $r[1][n]$.
+
+##### 3: Percorrendo a matriz na diagonal
+
+```c
+for (i=1; i <= n; i++) {
+  m[i][i] = 0;
+}
+for (d=1; d < n; d++) {
+  for (i=1; i <= n-d; i++) {
+    j = i + d;
+    m[i][j] = INF;
+    for (k=i; k < j; k++) {
+      m[i][j] = min(m[i][j], m[i][k] + m[k+1][j] + a[i-1]*a[k]*a[j]);
+    }
+  }
+}
+```
+
+##### 1: Percorrendo a matriz de baixo pra cima
+
+...
+
+```c
+for (i=n-1; i >= 1; i--) {
+  for (j=i+1; j <= n; j++) {
+    ...
+  }
+}
+```
+
+...
+
+> Em programação dinâmica é importante pensar em qual será a última operação que faremos.
+
+#### Strassen: $O(n^w; w \approx 2.37)
+
+#### resolvendo
+
+```c
+string s = recupera(1, n)
+
+string recupera(i, j) { // Roda n-1 vezes
+  if (i == j) return "A" + itoa(i); // log(n) para converter a string | O(1) por simplificação
+  l = recupera(i, r[i][j]);
+  r = recupera(r[i][j]+1, j);
+  return "(" + l + r + ")"; // linear em $n$
+}
+```
+
+Complexidade da recuperação: $O(n^2)$
+
+Exercício: tentar fazer melhor que $O(n^2)$
+
+## 09/04/2025 - Aula 09
