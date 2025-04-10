@@ -1043,3 +1043,167 @@ Complexidade da recuperação: $O(n^2)$
 Exercício: tentar fazer melhor que $O(n^2)$
 
 ## 09/04/2025 - Aula 09
+
+### Árvore Binária de Busca Ótima (ABBO)
+
+```mermaid
+flowchart LR
+  A((X: [a, b]))
+  B(([a, x[))
+  C((]x, b]))
+  A -->|<X| B
+  A -->|>X| C
+```
+
+- 1, 2, ..., n
+
+```mermaid
+flowchart LR
+  A((1))
+  B((2))
+  C((3))
+  D((4))
+  A --> B
+  B --> C
+  C --> D
+```
+
+---
+
+Para a i-ésima chave tenho $f_i$ acessos.
+
+Seja $c_i$ o número de comparações necessárias para alcançar $i$ na árvore.
+
+Minimizar $\sum c_i \cdot f_i$
+
+---
+
+Exemplos:
+
+```mermaid
+flowchart LR
+  A((1:1000))
+  B((2:1001))
+  C((3:1002))
+  C --> B
+  B --> A
+```
+
+Acessos: 1*1000+2*1001+3*1000 = 6004
+
+```mermaid
+flowchart LR
+  A((1:1000))
+  B((2:1001))
+  C((3:1002))
+  B --> A
+  B --> C
+```
+
+---
+
+Dúvida: Eu poderia definir as medianas como raízes dos filhos abaixo?
+
+Resposta: se os pesos fossem iguais, sim. Você balancearia. Porém, como os pesos são diferentes, acaba não necessariamente dando certo.
+
+---
+
+```mermaid
+flowchart LR
+  A((i))
+  B((X))
+  C((X))
+  A -->|"[1, i-1]"| B
+  A -->|"[i+1, n]"| C
+```
+
+$C_{1, i-1}^{1} (T)$: Custo da árvrore contendo itens de 1 a i-1, quando afixado ao nível 1.
+
+---
+
+```mermaid
+flowchart LR
+  A((i'))
+  B((i))
+  C((X))
+  A --> B
+  B -->|"[1, i-1]"| C
+```
+
+$C^2(T) = C^1(T) + \sum_{j=1}^{i-1} f_j$
+
+$F_{i, j} = \sum_{k=i}^{j} f_k$
+
+---
+
+#### Programação Dinâmica
+
+$ABBO (i, j) =$ Menor custo de uma ABB contendo as chaves $\{i, \dots, j\}$
+
+Queremos $ABBO (1, n)$
+
+$$
+ABBO (1, n) =
+\begin{cases}
+  0 & i > j \\
+  f_i & i = j \\
+  \min_{i \leq k \leq j} (ABBO (1, k-1) + ABBO (k+1, n) + F_{i, j}) & \\
+\end{cases}
+$$
+
+---
+
+$$
+\begin{bmatrix}
+  X      & 0      & 1      & \dots  & n      \\
+  1      & 0      & ?      & \dots  & ?      \\
+  2      & ?      & 0      & \dots  & ?      \\
+  \vdots & \vdots & \vdots & \ddots & \vdots \\
+  n      & ?      & ?      & 0      & f_n    \\
+  n + 1  & ?      & ?      & \dots  & 0      \\
+\end{bmatrix}
+$$
+
+Complexidade: $\Theta(n^3)$
+
+#### Aprimoramento
+
+$r_{i, j}$
+
+$r_{i, j+1} =$
+
+Lema: $r_{i, j} \leq r_{i, j+1} \leq r_{i+1, j+1}$
+
+=
+
+$i \leq r_{i, j-1} \leq r_{i, j} \leq r_{i+1, j} \leq j$
+
+---
+
+$$
+ABBO (1, n) =
+\begin{cases}
+  0 & i > j \\
+  f_i & i = j \\
+  \min_{r_{i, j-1} \leq (k=r_{i, j}) \leq r_{i+1, j}} (ABBO (1, k-1) + ABBO (k+1, n) + F_{i, j}) & \\
+\end{cases}
+$$
+
+##### Código - Aula 09
+
+```c
+for(d=1; d<=n-1; d++){
+  for (i=1; i <= n-d; i++){
+    j = i+d;
+    for (k=r[i][j-1]; k <= r[i+1][j]; k++){
+      // Relação de recorrência
+    }
+  }
+}
+```
+
+Calculando a complexidade...
+
+[Saí da aula 18h04]
+
+## 14/04/2025 - Aula 10
