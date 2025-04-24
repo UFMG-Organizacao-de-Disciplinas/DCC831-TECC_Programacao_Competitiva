@@ -35,6 +35,7 @@ Estudar algoritmos e estruturas de dados que sejam úteis para competições de 
   - Depois do primeiro (source), adicionamos os vértices para os quais ele foi, comeando pelo menor.
   - O menor então atualiza as novas menores distâncias atingíveis.
 - Pseudocódigo:
+
   - Inicialização
   - repita n -1 vezes
     - seja v o vértice desmarcado com o mentor dist[v]
@@ -110,7 +111,7 @@ void dijkstra(int s){
 
       if (dist[w] > dist[v] + c){
         dist[w] = dist[v] + c;
-        fila.push(make_pair(-dist[w], w));  
+        fila.push(make_pair(-dist[w], w));
       }
     }
   }
@@ -183,7 +184,7 @@ while(cin >> n){ // Roda enquanto não for EOF
 ```
 
 Comando para rodar enviando um arquivo como entrada:
-  
+
 ```bash
 ./a.out < input.txt
 ```
@@ -223,7 +224,7 @@ int main(){
   int X = 0;
   for (int i = 0; i < n; i++)
     X |= liga(i); // X = X|liga(i);
-  
+
   // Outra alternativa seria usar o
   X = (1 << (n+1)) - 1;
   // Dessa forma, teríamos 10000000000, reduzido 1: 1111111111
@@ -260,10 +261,10 @@ void main(){
   // ou: p = {19, 'j'};
   q = p;
   if (p==q) cout << "Igual" << endl;
-  
+
   q.second = 'z';
   if (p<q) cout << "Menor" << endl;
-  
+
 }
 ```
 
@@ -463,9 +464,7 @@ Uma forma de melhor de $O(n)$ seria fazer um tipo de vetor acumulado.
 
 - Então no caso:
   - -3, 1, 4, 5, 8, 10, 15
-  - Teríamos o intervalo:
-            - 5~8 = 3; 5 e 8~10=7; 5 e 8 e 10 ~ 15 = 22
-            - Ou seja, de 5 a 8 aumenta 3; Para chegar a 10, precisa aumentar tanto o 5 quanto o 8 para 10 em 2 unidades. E depois, tanto o 5, quanto o 8, quanto o 10 em 5 unidades até o 15.
+  - Teríamos o intervalo: - 5~8 = 3; 5 e 8~10=7; 5 e 8 e 10 ~ 15 = 22 - Ou seja, de 5 a 8 aumenta 3; Para chegar a 10, precisa aumentar tanto o 5 quanto o 8 para 10 em 2 unidades. E depois, tanto o 5, quanto o 8, quanto o 10 em 5 unidades até o 15.
 
 ---
 
@@ -823,20 +822,20 @@ $LIS(i) =$ COmprimento da maior subsequência terminando em $i$.
 
 Calculando LIS do exemplo:
 
-| Categorias |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |
-| ---------- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Valores:   |    7 |    4 |    8 |    5 |   13 |   10 |   11 |    9 |   14 |    8 |
-| Lis(i)     |    1 |    1 |    2 |    2 |    3 |    3 |    4 |    3 |    5 |    3 |
+| Categorias |   1 |   2 |   3 |   4 |   5 |   6 |   7 |   8 |   9 |  10 |
+| ---------- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: |
+| Valores:   |   7 |   4 |   8 |   5 |  13 |  10 |  11 |   9 |  14 |   8 |
+| Lis(i)     |   1 |   1 |   2 |   2 |   3 |   3 |   4 |   3 |   5 |   3 |
 
 - $Lis(i) = \max_{\forall j < i; v[j] < v[i]} LIS(j)+1$
 - Resposta: $\max_{\forall i} LIS(i)$
 
 $\Theta(n^2)$
 
-| Categorias | 0         |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |
-| ---------- | --------- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Valores:   | $-\infty$ |    7 |    4 |    8 |    5 |   13 |   10 |   11 |    9 |   14 |    8 |
-| Lis(i)     | 0         |    1 |    1 |    2 |    2 |    3 |    3 |    4 |    3 |    5 |    3 |
+| Categorias | 0         |   1 |   2 |   3 |   4 |   5 |   6 |   7 |   8 |   9 |  10 |
+| ---------- | --------- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: |
+| Valores:   | $-\infty$ |   7 |   4 |   8 |   5 |  13 |  10 |  11 |   9 |  14 |   8 |
+| Lis(i)     | 0         |   1 |   1 |   2 |   2 |   3 |   3 |   4 |   3 |   5 |   3 |
 
 #### Melhoria do LIS
 
@@ -844,10 +843,10 @@ Melhorando: Apenas guarda a mais recente melhoria para determinado valor.
 
 Ao invés de comparar todos os valores, podemos armazenar apenas o mais recente mínimo valor encontrado
 
-| Categorias | 0         |    1 |     2 |    3 |     4 |    5 |    6 |     7 |    8 |     9 |    10 |
-| ---------- | --------- | ---: | ----: | ---: | ----: | ---: | ---: | ----: | ---: | ----: | ----: |
-| Valores:   | $-\infty$ |    7 |     4 |    8 |     5 |   13 |   10 |    11 |    9 |    14 |     8 |
-| Lis(i)     | 0         |    1 | **1** |    2 | **2** |    3 |    3 | **4** |    3 | **5** | **3** |
+| Categorias | 0         |   1 |     2 |   3 |     4 |   5 |   6 |     7 |   8 |     9 |    10 |
+| ---------- | --------- | --: | ----: | --: | ----: | --: | --: | ----: | --: | ----: | ----: |
+| Valores:   | $-\infty$ |   7 |     4 |   8 |     5 |  13 |  10 |    11 |   9 |    14 |     8 |
+| Lis(i)     | 0         |   1 | **1** |   2 | **2** |   3 |   3 | **4** |   3 | **5** | **3** |
 
 | Índice | Menor Elemento terminando IS de comprimento i |
 | -----: | :-------------------------------------------- |
@@ -866,11 +865,11 @@ Pode-se usar busca binária para encontrar onde inserir o valor.
 
 - Um vetor auxiliar que armazena o índice do valor anterior válido.
 
-| Categorias | 0         |    1 |     2 |    3 |     4 |    5 |    6 |     7 |    8 |     9 |    10 |
-| ---------- | --------- | ---: | ----: | ---: | ----: | ---: | ---: | ----: | ---: | ----: | ----: |
-| Valores:   | $-\infty$ |    7 |     4 |    8 |     5 |   13 |   10 |    11 |    9 |    14 |     8 |
-| Lis(i)     | 0         |    1 | **1** |    2 | **2** |    3 |    3 | **4** |    3 | **5** | **3** |
-| Anterior   | 0         |    0 |     0 |    2 |     2 |    4 |    4 |     6 |    4 |     7 |     4 |
+| Categorias | 0         |   1 |     2 |   3 |     4 |   5 |   6 |     7 |   8 |     9 |    10 |
+| ---------- | --------- | --: | ----: | --: | ----: | --: | --: | ----: | --: | ----: | ----: |
+| Valores:   | $-\infty$ |   7 |     4 |   8 |     5 |  13 |  10 |    11 |   9 |    14 |     8 |
+| Lis(i)     | 0         |   1 | **1** |   2 | **2** |   3 |   3 | **4** |   3 | **5** | **3** |
+| Anterior   | 0         |   0 |     0 |   2 |     2 |   4 |   4 |     6 |   4 |     7 |     4 |
 
 Uma possibilidade seria varrer o vetor LIS da direita pra esquerda sempre pegando o primeiro valor de determinado valor do lis.
 
@@ -903,13 +902,13 @@ $A_1 \cdot A_2 \cdot A_3 \cdot A_4 \cdot A_5$
 - Testar todas as possibilidades de combinações de primeiro par
   - $O(n-1)!$
 
-|    n | # formas |
-| ---: | -------: |
-|    1 |        1 |
-|    2 |        1 |
-|    3 |        2 |
-|    4 |        5 |
-|    5 |       14 |
+|   n | # formas |
+| --: | -------: |
+|   1 |        1 |
+|   2 |        1 |
+|   3 |        2 |
+|   4 |        5 |
+|   5 |       14 |
 
 1. (..)(..)
 2. (((..).).)
@@ -937,7 +936,7 @@ Exercício: prove por indução de que isso é pelo menos tão ruim quanto expon
 - Números de maneiras de construir uma árvore com N nós
   - $A(n) = 1, n \leq 1$
   - $An(n) = \sum_{i=0}^{n-1} A(i) \cdot A(n-i-1)$
-<!-- - $C(n) = \frac{1}{n+1} \binom{2n}{n}$ -->
+  <!-- - $C(n) = \frac{1}{n+1} \binom{2n}{n}$ -->
 
 #### Solução 2 - Aula 08
 
@@ -1089,7 +1088,7 @@ flowchart LR
   B --> A
 ```
 
-Acessos: 1*1000+2*1001+3*1000 = 6004
+Acessos: 1*1000+2*1001+3\*1000 = 6004
 
 ```mermaid
 flowchart LR
@@ -1206,4 +1205,119 @@ Calculando a complexidade...
 
 [Saí da aula 18h04]
 
-## 14/04/2025 - Aula 10
+## 14/04/2025 - Aula 10 - Faltei
+
+## 16/04/2025 - Aula 11 - Faltei
+
+## 21/04/2025 - Aula XX - Feriado
+
+## 23/04/2025 - Aula 12 - Atrasado
+
+### Aula 12: Problema 1
+
+- Quantos Subconjuntos dos elementos de v cuja soma = x?
+  - O(2^n): testa todos subconjuntos.
+  - DP(i, j) = quantidades de subconjuntos de {1, ..., i} somam j
+
+---
+
+- Entradas?
+  - v[], n, x
+  - |v[i]| \leq M \equiv 10^{18}
+  - 0 \leq v[i] \leq M
+  - |x| \leq M \equiv 10^{18}
+  - 0 \leq x \leq M
+  - 0 \leq n \leq N
+- Ex.:
+  - v = 2, 8, 9, 15, 20, 21
+  - x = 45: (2, 8, 15, 20), (9, 15, 21)
+
+---
+
+$$
+DP(i, j) =
+\begin{cases}
+  0 & i=0, j \neq 0\\
+  1 & i=0, j=0\\
+  DP(i-1, j) + DP(i-1, j-v[i]) & \\
+\end{cases}
+$$
+
+- $O(nx)$
+- $O(n(mM))$
+
+#### Meet in the Middle
+
+- $n \cong 40$
+- Dividir em dois grupos de $2^{\frac{n}{2}}$
+  - $O(n 2^{\frac{n}{2}})$
+
+### Aula 12 - Problema 2
+
+- $G$, $n$ vértices, $m$ arestas
+- $2^n n^2$
+- Conjunto Independente (CI): $S \subseteq V(G)$ tal que $\forall u, v \in S, uv \notin E(G)$
+- $\alpha(G)$ = Conjunto Independente Máximo
+- $\sigma(G) \geq 2$
+- $\alpha(G) = \max (\alpha(G-v), \alpha(G-v-N(v))+1)$
+- $T(n) = T(n-1) + T(n-3) + c$, $a^n, a < 2$
+- $F(n) = F(n-1) + F(n-2)$
+  - $F(n) \cong 1.68^M$
+
+---
+
+- $V(G) = A \cup B, |A| = |B| = \frac{|V(G)}{2}$
+- Conjunto Independente Maximal: aqueles que não são subconjuntos de outros Conjuntos Independentes
+
+---
+
+- Dado $X \subseteq B, \alpha(G[X]) =$ tamanho do maior conjunto independente que é subconjunto de X.
+
+---
+
+- Se $v \in B, \alpha(G[B]) = \max(\alpha(G[B - \{v\}]), \alpha(G[B - N(v) - \{v\}]) + 1)$
+- $\forall X \subseteq B, O(n 2^{\frac{n}{2}})$
+
+$$
+CI(X) =
+\begin{cases}
+  0 & X = \emptyset\\
+  \max(CI(X-\{v\}), CI(X-v-N(v))+1) & \\
+\end{cases}
+$$
+
+- $O(n)$
+- $O(2^{\frac{n}{2}}n^2)$
+
+---
+
+- Meet in the Middle tende a converter a complexidade em sua raiz.
+- Hipótese do Logaritmo Discreto
+
+### Aula 12 - Problema 3: Problema de coloração de vértices
+
+- Com dois, podemos fazer BFS em cada paridade de nível tem uma cor diferente.
+
+- Saber se dá pra colorir com 3 cores é NP-difícil.
+- Uma forma é fazer de forma gulosa e testar todas as $n!$ possibilidades.
+- Para $i$ pequeno, testa todas as $3^i$ possibilidades.
+- K-coloração $O(k^n)$
+
+---
+
+- $COL(S) =$ menor número de cores para colorir $G[S]$
+
+$$
+COL(S) =
+\begin{cases}
+  0 & S = \emptyset\\
+  % 1 & S = \{v\}\\
+  \min_{X \subseteq S, X\ independente} COL(S - X) + 1 & \\
+\end{cases}
+$$
+
+- Complexidade: $$
+  - $\sum_{i=0}^{n} \binom{n}{i} 2^{i} 1^{n-1} = (2+1)^n = 3^n$
+  - $(a+b)^n = \sum_{i=0}^{n} \binom{n}{i} a^i b^{n-i}$
+
+## 28/04/2025 - Aula 13
